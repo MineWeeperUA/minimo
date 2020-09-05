@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% load static %} 
+
+{% block content %}
+
+<section id="mainPost">
+	<div id="mainPhoto">	
+		<img src="{{latest_article.main_image.url}}">
+	</div>
+	<div id="mainPostInfo">
+
+		{% for category in latest_article.category.all%}
+
+			<h3>
+				<a href="#">{{category.name}}</a>	
+			</h3>
+
+		{% endfor %}
+
+		<h1>
+			<a href="{{latest_article.get_absolute_url}}">
+				{{latest_article.title}}
+			</a>
+		</h1>
+		<p>
+			{{latest_article.text_on_main|safe}}
+		</p>
+		<h3>
+			<a href="{{latest_article.get_absolute_url}}">Leave a comment</a>
+		</h3>
+	</div>
+</section>
+
+<section class="posts">
+
+	{% for article in top_articles %}
+
+	<div>
+		<img src="{{article.main_image.url}}" alt="">
+		<h3>
+			<a href="#">
+				{% for category in article.category.all%}
+					{{category.name}}
+				{% endfor %}
+			</a>
+		</h3>
+		<h1>
+			<a href="{{article.get_absolute_url}}">
+				{{article.title}}
+			</a>
+		</h1>
+		<p>
+			{{article.text_on_main|truncatechars:190|safe}}
+		</p>
+	</div>
+
+	{% endfor %}
+
+</section>
+
+<section id="sighnUp">
+	<div id="innerSighnUp">
+		<h1>Sign up for our newsletter!</h1>
+		<form>
+			<input placeholder="Enter a valid email address" type="email">
+			<button type="submit">		
+				<img src="{% static 'icons/send.png' %}">
+			</button>
+		</form>
+		<div class="hl"></div>
+	</div>
+</section>
+
+{% if amount_of_articles >= 4 %}
+
+<section class="posts">
+
+	{% for article in bottom_articles %}
+
+	<div>
+		<img src="{{article.main_image.url}}" alt="">
+		<h3>
+			<a href="#">Lifestyle</a>
+		</h3>
+		<h1>
+			<a href="{{article.get_absolute_url}}">
+				{{article.title}}
+			</a>
+		</h1>
+		<p>
+			{{article.text_on_main|truncatechars:190|safe}}
+		</p>
+	</div>
+
+	{% endfor %}
+
+</section>
+
+{% endif %}
+
+
+{% if amount_of_articles >= 9 %}
+
+<a id="loadMore" href="{% url 'index' %}">
+	<span>Load More</span>
+</a>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% load static %} 
+
+{% block content %}
+
+<section id="mainPost">
+	<div id="mainPhoto">	
+		<img src="{{article.main_image.url}}">
+	</div>
+	<div id="mainPostInfo" class="detailView">
+		<ul>
+			<li>
+				<h3>
+					<a href="#">photodiary</a>
+				</h3>
+			</li>
+			<li>
+				<h3>
+					<a href="{% url 'addreactionarticle' 'like' article.id %}">
+						<i class="fas fa-thumbs-up"></i>
+						<span>
+							: {{article.likes}}
+						</span>
+					</a>
+				</h3>
+			</li>
+			<li>
+				<h3>
+					<a href="{% url 'addreactionarticle' 'dislike' article.id %}">
+						<i class="fas fa-thumbs-down"></i>
+						<span>
+							: {{article.dislikes}}
+						</span>
+					</a>
+				</h3>
+			</li>
+		</ul>
+		<h1>
+			<a href="#">{{article.title}}
+			</a>
+		</h1>
+		<p>{{ article.content|safe }}</p>	
+		<h3>
+			<a href="#leave_comment">Leave a comment</a>
+		</h3>
+	</div>
+</section>
+<section id="relatedPosts">
+	<h3>You may also like</h3>
+	<ul>
+		{% for article in article.get_related_articles %}
+		<a href="{{article.get_absolute_url}}">
+			<img src="{{article.main_image.url}}">
+			<h2>{{article.title}}</h2>
+		</a>
+		{% endfor %}
+	</ul>
+</section>
+<section id="comments">
+	<div id="innerComments">
+		<h3>
+			{% if article.get_comments.count == 1 %}
+				{{article.get_comments.count}} comment
+			{% else %}
+				{{article.get_comments.count}} comments
+			{% endif %}
+		</h3>		
+		<div id="commentsList">
+			{% for comment in article.get_comments %}
+			<div class="comment">
+				<div class="photoPart">
+					<div>
+						<span>{{comment.author|slice:":1"}}</span>
+					</div>
+				</div>
+				<div class="mainPart">
+					<h4>{{comment.author}}</h4>
+					<p>{{comment.text}}</p>
+					<div class="commentReactions">
+						<a href="{% url 'addreactioncomment' 'like' article.id comment.id%}">
+							<i class="fas fa-thumbs-up"></i> :
+							{{comment.likes}}
+						</a>
+						<a href="{% url 'addreactioncomment' 'dislike' article.id comment.id%}">
+							<i class="fas fa-thumbs-down"></i> :
+							{{comment.dislikes}}
+						</a>
+						<a class="replyButton">Reply</a>
+						<form class="mainPart hiddenReply" action="{% url 'add_comment' article.id %}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="parent" value="{{comment.id}}">
+							<input name="author" type="text" placeholder="Your name">
+							<textarea placeholder="Your Reply" class="texta" name="text"></textarea>
+							<input type="submit" value="Send">
+						</form>
+					</div>
+					{% for com in comment.comment_set.all %}	
+					<div class="innerComment comment">
+						<div class="photoPart">
+							<div>
+								<span>{{com.author|slice:":1"}}</span>
+							</div>
+						</div>
+						<div class="mainPart">
+							<h4>{{com.author}}</h4>
+							<p>{{com.text}}</p>
+							<div>
+								<a href="{% url 'addreactioncomment' 'like' article.id com.id%}">
+									<i class="fas fa-thumbs-up"></i> :
+									{{com.likes}}
+								</a>
+								<a href="{% url 'addreactioncomment' 'dislike' article.id com.id%}">
+									<i class="fas fa-thumbs-down"></i> :
+									{{com.dislikes}}
+								</a>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+		<form id="leave_comment" method="post" class="comment" action="{% url 'add_comment' article.id %}">
+			<div class="photoPart">
+				<div>
+					<span>J</span>
+				</div>
+			</div>
+			<div class="mainPart mainPartForm">
+				{% csrf_token %}
+				<input type="hidden" name="parent">
+				<input name="author" type="text" placeholder="Your name">
+				<div id="commentSlideDown">
+					<textarea placeholder="Join Discussion" class="texta" name="text"></textarea>
+					<input type="submit" value="Send">
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+<script src="{% static 'js/autosize.js' %}"></script>
+<script src="{% static 'js/article_detail_view.js' %}"></script>
+{% endblock %}

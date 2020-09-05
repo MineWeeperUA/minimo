@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	
+	{% block title %}
+	
+	<title>Minimø</title>
+	
+	{% endblock %}
+	
+	{% load static %} 
+
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	 <link rel="shortcut icon" href="{% static 'icons/favicon.png' %}" type="image/png">
+	<link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+</head>
+<body>
+	<header>
+		<div id="innerHeader">
+			<div id="logo">
+				<a href="{% url 'index' %}">Minimø</a>
+			</div>
+			<nav>
+				<ul>
+					<li>
+						<a href="{% url 'index' %}"><span>lifestyle</span></a>
+					</li>
+					<li>
+						<a href="{% url 'index' %}"><span>photodiary</span></a>
+					</li>
+					<li>
+						<a href="{% url 'index' %}"><span>music</span></a>
+					</li>
+					<li>
+						<a href="{% url 'index' %}"><span>travel</span></a>
+					</li>
+				</ul>
+			</nav>			
+		</div>
+	</header>
+	<div id="main">
+
+		{% block content %}
+
+		{% endblock %}
+
+	</div>
+	<footer>
+		<div id="innerFooter">
+			<ul id="leftFooter">
+				<li>
+					<a href="{% url 'terms_and_conditions' %}">Terms and conditions</a>
+				</li>
+				<li>
+					<a href="{% url 'privacy' %}">Privacy</a>
+				</li>
+			</ul>
+			<ul id="rightFooter">
+				<li>
+					<span>Follow</span>
+				</li>
+				<li>
+					<a href="https://facebook.com">
+						<i class="fab fa-facebook-f"></i>
+					</a>
+				</li>
+				<li>
+					<a href="https://twitter.com">
+						<i class="fab fa-twitter"></i>
+					</a>
+				</li>
+				<li>
+					<a href="https://instagram.com">
+						<i class="fab fa-instagram"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</footer>
+</body>
+</html>
