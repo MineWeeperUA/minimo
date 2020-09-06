@@ -1,1 +1,1 @@
-web: gunicorn pp:app
+web: gunicorn minimo.wsgi --log-file -
